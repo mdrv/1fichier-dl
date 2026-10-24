@@ -6,6 +6,7 @@ import logging
 import PyQt5.sip
 import queue
 from .helpers import *
+from ..xdg import state_dir
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 proxy_queue = queue.Queue()
@@ -196,7 +197,9 @@ def download(worker, payload={'dl_no_ssl': 'on', 'dlinline': 'on'}, downloaded_s
                           worker.dl_directory + '/' + name[:-11])
 
                 logging.info( log_ip+': '+ log_name[:-11]+': '+ log_speed)
-                f = open( 'completed_list.txt', mode='a', encoding='utf-8')
+                completed_path = os.path.join(state_dir(), 'app', 'completed_list.txt')
+                os.makedirs(os.path.dirname(completed_path), exist_ok=True)
+                f = open( completed_path, mode='a', encoding='utf-8')
                 f.write( time.asctime( time.localtime())+' '+ log_ip+': '+ log_name[:-11]+': '+ log_speed+'\n')
                 f.close()
 

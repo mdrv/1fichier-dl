@@ -3,6 +3,7 @@ import os
 import sys
 import logging
 from core.gui import gui
+from core.xdg import state_dir
 
 log_level = logging.DEBUG
 if getattr(sys, 'frozen', False):
@@ -10,8 +11,8 @@ if getattr(sys, 'frozen', False):
     log_dir = os.path.join(os.path.dirname(sys.executable), 'app')
     log_level = logging.INFO
 else:
-    # If the script is running in a development environment
-    log_dir = os.path.join(os.path.dirname(__file__), 'app')
+    # Keep logs out of the program path when installed system-wide
+    log_dir = os.path.join(state_dir(), 'app')
 
 if __name__ == '__main__':
     try:

@@ -8,6 +8,7 @@ import qdarktheme
 import webbrowser
 import PyQt5.sip
 from ..download.workers import FilterWorker, DownloadWorker
+from ..xdg import state_dir
 from PyQt5.QtCore import Qt, QThreadPool
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtGui import QIcon, QStandardItemModel, QPixmap, QFontDatabase, QFont
@@ -45,8 +46,13 @@ def resource_path(relative_path):
 
 
 def abs_config(path):
-    # Fixed to program execution path
-    resolved_path = os.path.abspath(path)
+    if getattr(sys, "frozen", False):
+        # PyInstaller build: keep the old behavior (relative to the exe)
+        resolved_path = os.path.abspath(path)
+    else:
+        # Keep state in the user's XDG config dir so an installed app
+        # works no matter which directory it is launched from
+        resolved_path = os.path.join(state_dir(), path)
     return resolved_path
 
 

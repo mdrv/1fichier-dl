@@ -1,6 +1,8 @@
 **🧙‍♂️ 1Fichier-dl Project**
 
-(This is a fork version of the 1Fichier-dl project, which is no longer being maintained.)
+(This fork continues `Leinad4Mind/1fichier-dl` — itself a fork of `jovanzers/1fichier-dl` — which has been unmaintained since July 2025.)
+
+**Versioning:** releases of this fork use their own version line, starting at `v3.0.0`. `v3.0.0` is based on upstream `v2.3.0` and carries fixes focused on Linux compatibility (notably Arch Linux packaging) and current 1fichier.com behavior.
 
 <p align="left">
   <img src="https://github.com/leinad4mind/1fichier-dl/blob/main/screenshots/ico.png?raw=true"></img>
@@ -32,20 +34,20 @@ We help you download at the fastest possible speed without having to wait for ea
 </p>
 
 <p align="center">
-  <b>Simple operation by entering the 1fichier link address in the 1fichier downloader program.</b>
+	<b>Simple operation by entering the 1fichier link address in the 1fichier downloader program.</b>
 </p>
-<br/>
-<br/>
+<br />
+<br />
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/leinad4mind/1fichier-dl/main/screenshots/preview_settings0.png"></img>
 </p>
 
 <p align="center">
-  <b>Copy from clipboard or automatically download to bypass latency through multiple proxy servers.</b>
+	<b>Copy from clipboard or automatically download to bypass latency through multiple proxy servers.</b>
 </p>
-<br/>
-<br/>
+<br />
+<br />
 
 ## 😼 Introduction to key features
 
@@ -68,20 +70,20 @@ _Your life is short. Don't wait any longer._
 </p>
 
 <p align="center">
-  <b>Light Theme</b>
+	<b>Light Theme</b>
 </p>
-<br/>
-<br/>
+<br />
+<br />
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/leinad4mind/1fichier-dl/main/screenshots/Screenshot_Dark.png"></img>
 </p>
 
 <p align="center">
-  <b>Dark Theme</b>
+	<b>Dark Theme</b>
 </p>
-<br/>
-<br/>
+<br />
+<br />
 
 ## 😻 Improvements
 
@@ -118,8 +120,8 @@ pip install -r requirements.txt
 python 1fichier-dl.py
 ```
 
-<br/>
-<br/>
+<br />
+<br />
 
 ## 😾 Building Windows exe using PyInstaller
 
@@ -138,8 +140,8 @@ The Python `Lib` path in the `paths` item will be a child of the `env` path when
 
 Strangely, due to the chronic virus misdiagnosis problem of `PyInstaller`, I downloaded the `PyInstaller` source directly, initialized the existing build environment with `python ./waf distclean all`, and then installed `setup.py` in the folder with `pip install .`. You must install it yourself.
 
-<br/>
-<br/>
+<br />
+<br />
 
 ## 😽 Thank you so much.
 

@@ -99,7 +99,13 @@ def getClipboardText():
     root = tk.Tk()
     # keep the window from showing
     root.withdraw()
-    return root.clipboard_get()
+    try:
+        return root.clipboard_get()
+    except tk.TclError:
+        # Clipboard empty or unreachable (e.g. under Wayland/XWayland)
+        return None
+    finally:
+        root.destroy()
 
 
 class GuiBehavior:

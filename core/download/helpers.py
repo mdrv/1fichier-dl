@@ -140,7 +140,14 @@ def get_link_info(url: str, retries: int = 3, delay: int = 1) -> list:
             if html.xpath('//*[@id="pass"]'):
                 return ['Private File', '- MB']
 
-            # Fetch the <td> inside the table with class "premium"
+            # Current layout: name and size inside the download form
+            # (#f1 > .tier-body > span.tier-name / span.tier-feat)
+            name = html.xpath('//form[@id="f1"]//span[@class="tier-name"]/text()')
+            size = html.xpath('//form[@id="f1"]//span[@class="tier-feat"]/text()')
+            if name and size:
+                return [name[0].strip(), size[0].strip()]
+
+            # Legacy layout: the <td> inside the table with class "premium"
             td = html.xpath('//table[@class="premium"]//td[@class="normal"]')[0]
             spans = td.xpath('.//span')
             nome = spans[0].text_content().strip()

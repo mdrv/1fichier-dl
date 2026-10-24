@@ -197,9 +197,17 @@ class DownloadWorker(QRunnable):
 
     def load_proxies(self):
         global proxy_queue
+        if str(self.proxy_settings or '').strip().lower() == 'direct':
+            # No proxy: download straight from the local IP (honors the
+            # site's own waiting period instead of bypassing it)
+            proxy_queue.put(None)
+            return
         proxies = get_proxies(settings=self.proxy_settings)
         for proxy in proxies:
             proxy_queue.put(proxy)
+        if proxy_queue.qsize() == 0:
+            # An empty proxy list would block forever on proxies.get()
+            proxy_queue.put(None)
 
     # Run download task as thread
     def run(self):

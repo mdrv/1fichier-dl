@@ -81,9 +81,9 @@ def download(worker, payload={'dl_no_ssl': 'on', 'dlinline': 'on'}, downloaded_s
         log_speed = ''
 
         try:
-            if not p:
+            if not p and worker.proxies.qsize() > 0:
                 p = worker.proxies.get()
-            proxy_ip = str(p['https']) if isinstance(p['https'], str) else ''
+            proxy_ip = str(p['https']) if isinstance(p, dict) and isinstance(p['https'], str) else ''
             log_ip = proxy_ip
             if (isinstance(worker.data, list)):
                 update_data = [

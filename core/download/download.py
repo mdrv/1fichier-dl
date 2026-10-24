@@ -116,7 +116,11 @@ def download(worker, payload={'dl_no_ssl': 'on', 'dlinline': 'on'}, downloaded_s
                 worker.signals.update_signal.emit(
                     worker.data, update_data)
 
-        if not html.xpath('/html/body/div[4]/div[2]/a'):
+        # Direct-download button on the ready page. The old absolute path
+        # (/html/body/div[4]/div[2]/a) broke when the site gained new
+        # wrappers; match the button by class instead.
+        direct_link = html.xpath('//a[contains(@class, "ok") and contains(@class, "btn-general")]')
+        if not direct_link:
             logging.debug('Failed to parse direct link.')
             if 'Bad password' in r.text:
                 if not wait_for_password(worker, payload['pass']):
@@ -124,7 +128,7 @@ def download(worker, payload={'dl_no_ssl': 'on', 'dlinline': 'on'}, downloaded_s
         else:
             logging.debug('Parsed direct link.')
             old_url = url
-            urlx = html.xpath('/html/body/div[4]/div[2]/a')[0].get('href')
+            urlx = direct_link[0].get('href')
             logging.debug('Parsed urlx Check: '+str(urlx))
             headers_opt['Referer'] = old_url
             headers_opt['Range'] = f'bytes={downloaded_size}-'

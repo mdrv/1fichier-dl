@@ -5,6 +5,7 @@ import lxml.html
 import logging
 import PyQt5.sip
 import queue
+import re
 from .helpers import *
 from ..xdg import state_dir
 import urllib3
@@ -120,6 +121,19 @@ def download(worker, payload={'dl_no_ssl': 'on', 'dlinline': 'on'}, downloaded_s
         # (/html/body/div[4]/div[2]/a) broke when the site gained new
         # wrappers; match the button by class instead.
         direct_link = html.xpath('//a[contains(@class, "ok") and contains(@class, "btn-general")]')
+        if not direct_link and not getattr(worker, '_gate_retried', False):
+            # A fresh IP is often served a short countdown gate; wait it
+            # out once and retry the same session before moving on.
+            ct = re.search(r'var ct = (\d+)\*?(\d+)?', r.text)
+            wait_s = min(int(ct.group(1)) * int(ct.group(2) or 1), 120) if ct else 0
+            if wait_s:
+                worker._gate_retried = True
+                logging.debug(f'Gate page (ct={wait_s}s) - waiting and retrying once.')
+                time.sleep(wait_s + 2)
+                r = requests.post(url, payload, headers=headers_opt,
+                                  proxies=p, timeout=worker.timeout, verify=False)
+                html = lxml.html.fromstring(r.content)
+                direct_link = html.xpath('//a[contains(@class, "ok") and contains(@class, "btn-general")]')
         if not direct_link:
             logging.debug('Failed to parse direct link.')
             if 'Bad password' in r.text:

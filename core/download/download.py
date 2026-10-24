@@ -75,6 +75,11 @@ def download(worker, payload={'dl_no_ssl': 'on', 'dlinline': 'on'}, downloaded_s
             worker.signals.update_signal.emit(worker.data, update_data)
             time.sleep(1)
 
+        if worker.proxies.qsize() == 0:
+            # Queue exhausted (direct mode, or every proxy tried):
+            # stop instead of blocking forever.
+            logging.debug('Proxy queue exhausted.')
+            return None if not worker.dl_name else worker.dl_name
         p = worker.proxies.get()
 
         log_ip = ''
